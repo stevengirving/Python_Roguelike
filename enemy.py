@@ -36,25 +36,31 @@ class EnemyParty:
         return self.enemy_group
 
 class EnemyUnit:
+    """Template for indidivual enemy units"""
     def __init__(self, name, health, attack):
-        self.name = name
+        self.name = name.title()
         self.health = health
         self.attack = attack
 
     def enemy_action(self):
         action = randint(0,3)
         if action == 0:
-            print("They do nothing")
+            print(f"The {self.name} does nothing")
             return 0
         elif action == 3:
-            print("They do a big move")
-            return self.attack + randint(1,5)
+            print(f"The {self.name} does a BIG ATTACK")
+            damage = self.attack + randint(1,5)
+            print(f"You take {damage} damage")
+            return damage
         else:
-            print("They do a normal move")
-            return self.attack + randint(-2,2)
+            print(f"The {self.name} does some stuff")
+            damage = self.attack + randint(-2,2)
+            print(f"You take {damage} damage")
+            return damage
 
     def enemy_damaged(self, damage):
-        self.health = self.health - damage
+        print(f"The {self.name} takes {damage} damage")
+        self.health -= damage
 
 
 # All enemies based on size
@@ -80,9 +86,3 @@ enemy_attack = {
     "large": 6,
     "boss": 8,
 }
-
-test = EnemyParty(10, 23)
-
-for i in range(len(test.enemy_group)):
-    x = test.enemy_group[i]
-    print(x.name, x.health, x.attack)
