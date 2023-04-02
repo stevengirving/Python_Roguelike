@@ -18,25 +18,40 @@ class Menu:
             exit(0)
         else:
             print("Please choose one of the options")
+            Menu()
 
 
 class SaveGame:
     """Saves timestamp, current room, and player name, health, attack, defense, inventory"""
-    def __init__(self, player_character):
+    def __init__(self, player_character, current_room):
+        pc = player_character
         time_now = datetime.now().timestamp()
-        save_name = player_character.name.lower() + ".save"
+        save_name = f"{pc.name.lower()}.save"
         print(f"Now saving...")
         cwd = os.getcwd()
-        print(save_name, cwd)
         full_path = os.path.join(cwd, save_name)
-        print(full_path)
+        save_content = f"{time_now}|{pc.name}|{pc.stats}|{pc.inventory}"
+        try:
+            open(full_path, 'w').write(save_content)
+            print(f"File saved successfully at {full_path}")
+        except:
+            print("Save failed")
 
 
 class LoadGame:
-    """Reads """
+    """Reads .save file to re-create player character at previous room"""
     def __init__(self):
-        pass
-
+        print("\nPlease choose your save file:\n")
+        save_name = input("> ")
+        try:
+            saved_character = open(f"{save_name}.save").read().split("|")
+        except:
+            print("Save file not found\n")
+            Menu()
+             
+        player_character = player.Load(saved_character[1], saved_character[-1], saved_character[2], saved_character[3])
+        print(player_character.name)
+        dungeon.CreateRoom(player_character)
 
 class NewGame:
     def __init__(self):
@@ -44,21 +59,21 @@ class NewGame:
 
 
     def game_start(self):
-        print("Please enter your name:")
-        name = input("> ").title()
-        print("Please select your difficulty: \n\n> EASY\n> MEDIUM\n> HARD")
+        print("\nPlease enter your name:")
+        name = input("> ").title().strip()
+        print("\nPlease select your difficulty: \n\n> EASY\n> MEDIUM\n> HARD\n")
         health = {"easy": 5, "medium": 0, "hard": -5}
         difficulty = input("> ")
-        print(f"Your name is {name} and you want to play on {difficulty}, correct?")
+        print(f"\nYour name is {name} and you want to play on {difficulty}, correct?")
         choice = input("> ")
         if choice == "yes":
-            print("cool")
+            print("\ncool")
         else:
-            print("shame")
+            print("\nshame")
         player_character = player.Player(name, health[difficulty])
-        SaveGame(player_character)
-        #dungeon.CreateRoom(player_character)
+        dungeon.CreateRoom(player_character)
 
 class GameOver:
     def __init__(self, death):
         print(f"You died because of {death}")
+        exit(0)

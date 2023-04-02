@@ -1,10 +1,9 @@
 from random import randint
 
 class EnemyParty:
-    def __init__(self, maximum_strength, current_room):
+    def __init__(self, maximum_strength, current_strength=0):
         self.maximum_strength = maximum_strength
-        self.current_room = current_room
-        self.current_strength = 0
+        self.current_strength = current_strength
         self.enemy_group = []
         self.create_party()
 
@@ -29,8 +28,8 @@ class EnemyParty:
         for x in group:
             size = enemy_sizes[x]
             unit = enemy_list[size][randint(0,len(enemy_list[size]) - 1)]
-            health = enemy_health[size] + randint(-2,2) + self.current_room
-            attack = enemy_attack[size] + randint(-2,2) + self.current_room
+            health = enemy_health[size] + randint(-2,2) + self.current_strength
+            attack = enemy_attack[size] + randint(-2,2) + self.current_strength
             new_unit = EnemyUnit(unit, health, attack)
             self.enemy_group.append(new_unit)
         return self.enemy_group
