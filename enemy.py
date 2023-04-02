@@ -1,15 +1,15 @@
 from random import randint
 
 class EnemyParty:
-    def __init__(self, maximum_strength, current_strength=0):
+    def __init__(self, maximum_strength):
         self.maximum_strength = maximum_strength
-        self.current_strength = current_strength
         self.enemy_group = []
         self.create_party()
 
     def create_party(self):
         """Creates an enemy party based on point allocation"""
         group = []
+        self.current_strength = 0
         while self.current_strength < self.maximum_strength:
             new_enemy = randint(1,3)
             if self.current_strength + new_enemy > self.maximum_strength:
@@ -28,7 +28,7 @@ class EnemyParty:
         for x in group:
             size = enemy_sizes[x]
             unit = enemy_list[size][randint(0,len(enemy_list[size]) - 1)]
-            health = enemy_health[size] + randint(-2,2) + self.current_strength
+            health = enemy_health[size] + randint(0,2) + self.current_strength
             attack = enemy_attack[size] + randint(-2,2) + self.current_strength
             new_unit = EnemyUnit(unit, health, attack)
             self.enemy_group.append(new_unit)

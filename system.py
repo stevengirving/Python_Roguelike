@@ -23,7 +23,7 @@ class Menu:
 
 class SaveGame:
     """Saves timestamp, current room, and player name, health, attack, defense, inventory"""
-    def __init__(self, player_character, current_room):
+    def __init__(self, player_character):
         pc = player_character
         time_now = datetime.now().timestamp()
         save_name = f"{pc.name.lower()}.save"
@@ -48,7 +48,7 @@ class LoadGame:
         except:
             print("Save file not found\n")
             Menu()
-             
+        print(f"File information:\nSave time: datetime.fromtimestamp({saved_character[0]})\nPlayer name: {saved_character[1]}")
         player_character = player.Load(saved_character[1], saved_character[-1], saved_character[2], saved_character[3])
         print(player_character.name)
         dungeon.CreateRoom(player_character)
@@ -75,5 +75,5 @@ class NewGame:
 
 class GameOver:
     def __init__(self, death):
-        print(f"You died because of {death}")
+        print(f"You died because {death}")
         exit(0)
