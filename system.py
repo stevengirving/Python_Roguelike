@@ -22,18 +22,22 @@ class Menu:
 
 
 class SaveGame:
-    """Saves timestamp, current room, and player name, health, attack, defense, inventory"""
+    """Saves timestamp, player name, health, attack, defense, room, inventory"""
     def __init__(self, player_character):
         pc = player_character
         time_now = datetime.now().timestamp()
         save_name = f"{pc.name.lower()}.save"
-        print(f"Now saving...")
+        save_health = pc.stats["health"]
+        save_attack = pc.stats["attack"]
+        save_defense = pc.stats["defense"]
+        save_room = pc.stats["room"]
+        print(f"\nNow saving...\n")
         cwd = os.getcwd()
         full_path = os.path.join(cwd, save_name)
-        save_content = f"{time_now}|{pc.name}|{pc.stats}|{pc.inventory}"
+        save_content = f"{time_now}|{pc.name}|{save_health},{save_attack},{save_defense},{save_room}|{pc.inventory}"
         try:
             open(full_path, 'w').write(save_content)
-            print(f"File saved successfully at {full_path}")
+            print(f"\nFile saved successfully at {full_path}")
         except:
             print("Save failed")
 
@@ -48,10 +52,21 @@ class LoadGame:
         except:
             print("Save file not found\n")
             Menu()
-        print(f"File information:\nSave time: datetime.fromtimestamp({saved_character[0]})\nPlayer name: {saved_character[1]}")
-        player_character = player.Load(saved_character[1], saved_character[-1], saved_character[2], saved_character[3])
-        print(player_character.name)
-        dungeon.CreateRoom(player_character)
+        saved_stats = saved_character[2].split(",")
+        print("File information:\nSave time: ",
+              datetime.fromtimestamp(float(saved_character[0])),
+              f"\nPlayer name: {saved_character[1]}",
+              f"\nRooms completed: {saved_stats[3]}",
+             )
+        print("\nLoad game?")
+        if input("> ") == "yes".lower():
+            player_character = player.Load(saved_character[1],
+                                           saved_stats,
+                                           saved_character[3],
+                                          )
+            dungeon.CreateRoom(player_character)
+        else:
+            Menu()
 
 class NewGame:
     def __init__(self):

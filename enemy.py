@@ -44,15 +44,15 @@ class EnemyUnit:
     def enemy_action(self):
         action = randint(0,3)
         if action == 0:
-            print(f"The {self.name} does nothing")
+            print(f"\nThe {self.name} does nothing")
             return 0
         elif action == 3:
-            print(f"The {self.name} does a BIG ATTACK")
+            print(f"\nThe {self.name} does a BIG ATTACK")
             damage = self.attack + randint(1,5)
             print(f"You take {damage} damage")
             return damage
         else:
-            print(f"The {self.name} does some stuff")
+            print(f"\nThe {self.name} does some stuff")
             damage = self.attack + randint(-2,2)
             print(f"You take {damage} damage")
             return damage
@@ -60,6 +60,8 @@ class EnemyUnit:
     def enemy_damaged(self, damage):
         print(f"The {self.name} takes {damage} damage")
         self.health -= damage
+        if self.health <= 0:
+            print(f"You murder the poor {self.name}")
 
 
 # All enemies based on size

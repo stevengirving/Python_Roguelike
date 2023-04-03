@@ -4,7 +4,6 @@ from math import remainder
 import system
 import dungeon
 
-# Heal 5 HP after every room
 
 class CreateRoom:
     def __init__(self, player_character):
@@ -22,31 +21,57 @@ class CreateRoom:
                 else:
                     FightRoom().start(player_character)
             player_character.stats["room"] += 1
+            player_character.stats["health"] += 5
             CreateRoom(player_character)
 
 class FightRoom:
 
     def start(self, player_character):
         print("\nFight room!\n")
-        fight_round = 1
+        self.fight_round = 1
         current_room = player_character.stats["room"]
         fight = enemy.EnemyParty(current_room)
+        self.total_health = []
+        print("In the room, ready for you, you find:")
         for x in range(0,len(fight.enemy_group)):
-            while fight.enemy_group[x].health > 0:
-                print(f"\nRound {fight_round}\n")
-                fight_round += 1
-                fight.enemy_group[x].health -= player_character.attack(fight.enemy_group[x].name)
-                if fight.enemy_group[x].health <= 0:
-                    print(f"You murdered the poor {fight.enemy_group[x].name}")
-                    break
-                player_character.stats["health"] -= fight.enemy_group[0].enemy_action()
+            print(fight.enemy_group[x].name)
+            self.total_health.append(fight.enemy_group[x].health)
+        self.fight_health = sum(self.total_health)
+        while self.fight_health > 0:
+            # Call to input.py to select enemy
+            # FightRoom.player_turn(player_character, enemy_unit)
+            print(f"\nRound {self.fight_round}\n")
+            self.fight_round += 1
+            target = randint(0,len(fight.enemy_group) - 1)
+            damage = FightRoom().player_turn(player_character, fight.enemy_group[target])
+            self.fight_health -= damage
+            if fight.enemy_group[target].health <= 0:
+                print(f"You murdered the poor {fight.enemy_group[y].name}")
+            for y in range(0, len(fight.enemy_group)):
+                FightRoom().enemy_turn(player_character, fight.enemy_group[y])
                 if player_character.stats["health"] <= 0:
-                    system.GameOver("you got stabbed")
-                print("Enemy HP:", fight.enemy_group[x].health)
-                print("Player HP:", player_character.stats["health"])
-            else:
-                pass
+                    system.SaveGame(player_character)
+                    system.GameOver("you should have dodged.")
+                print(f"\n{fight.enemy_group[y].name} HP:", fight.enemy_group[y].health)
+                print("Player HP:", player_character.stats["health"], "\n")
+        else:
+            pass
     
+    def player_turn(self, player_character, enemy_unit):
+        if enemy_unit.health <= 0:
+            return 0
+        else:
+            damage = player_character.attack(enemy_unit.name)
+            enemy_unit.enemy_damaged(damage)
+            return damage
+
+    def enemy_turn(self, player_character, enemy_unit):
+        if enemy_unit.health <= 0:
+            pass
+        else:
+            player_character.damaged(enemy_unit.enemy_action())
+
+
 class HealRoom:
     
     def start(self, player_character):

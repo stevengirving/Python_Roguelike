@@ -15,8 +15,8 @@ class Player:
 
     stats = {
         "health": 20,
-        "attack": 5,
-        "defense": 2,
+        "attack": 3,
+        "defense": 1,
         "room": 1,
             }
 
@@ -28,10 +28,11 @@ class Player:
 
 
 class Load(Player):
-    def __init__(self, name, current_room, stats, inventory):
+    def __init__(self, name, stats, inventory):
         self.name = name
-        self.stats["health"]: stats[0]
-        self.stats["attack"]: stats[1]
-        self.stats["defense"]: stats[2]
-        self.stats["room"]: stats[3]
+        self.stats["health"] = int(stats[0])
+        self.stats["attack"] = int(stats[1])
+        self.stats["defense"] = int(stats[2])
+        self.stats["room"] = int(stats[3])
         self.inventory = inventory[:]
+
