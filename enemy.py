@@ -69,7 +69,6 @@ enemy_list = {
     "small": ["goblin", "kobold", "skeleton", "zombie", "rat", "spider", "bat"],
     "medium": ["hobgoblin", "bugbear", "doppleganger", "ettercap", "harpy", "manticore", "minotaur", "ogre", "werewolf"], 
     "large": ["a small rabbit", "giant", "chimera", "bear", "cyclops", "gorgon", "hydra", "troll"],
-    "boss": [],
 }
 
 # Base Health
@@ -77,7 +76,6 @@ enemy_health = {
     "small": 3,
     "medium": 6, 
     "large": 9,
-    "boss": 12, 
 }
 
 #Base Attack
@@ -85,5 +83,4 @@ enemy_attack = {
     "small": 2,
     "medium": 4,
     "large": 6,
-    "boss": 8,
 }
